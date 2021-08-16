@@ -3,7 +3,7 @@
   width: 80%;
   background-color: white;
   padding: 20px;
-  width: max-content;
+  max-width: 96%;
   border-radius: 5px;
 }
 .btn:focus {
