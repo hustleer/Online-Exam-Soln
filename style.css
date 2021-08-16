@@ -5,6 +5,7 @@
   padding: 20px;
   max-width: 96%;
   border-radius: 5px;
+  width: max-content;
 }
 .btn:focus {
   outline-color: none !important;
