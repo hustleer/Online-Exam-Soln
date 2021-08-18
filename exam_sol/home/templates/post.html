@@ -37,22 +37,26 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link " aria-current="page" href="./home.html"
+                <a class="nav-link " aria-current="page" href="/"
                   >All</a
                 >
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="./post.html">Post</a>
+                <a class="nav-link active" href="/postquestion">Post</a>
               </li>
             </ul>
-            <form class="d-flex">
+       <form class="d-flex" action="/searchquestion"  method="POST">
+             {% csrf_token %}  
+
               <input
                 class="form-control me-2"
                 type="search"
+                id = "searchques"
+                name = "searchques"
                 placeholder="Search"
                 aria-label="Search"
               />
-              <button class="btn btn-primary" type="submit">Search</button>
+              <button class="btn btn-primary" name="searchquestion" type="submit">Search</button>
             </form>
           </div>
         </div>
@@ -60,18 +64,20 @@
     </div>
     <div class="container-lg my-4">
 
-        <form action='./home.html'> 
+        <form action='/postquestion' method= "POST"> 
+                 {% csrf_token %}  
+
             <div class="mb-3">
               <label for="exampleInputQuestion1" class="form-label">Question??</label>
-              <textarea class="form-control" rows="1"cols="1" id="floatingTextarea" placeholder="What's up?" required></textarea>
+              <textarea class="form-control" rows="1"cols="1" id="question" name="question" placeholder="Pate or type your question here" required></textarea>
             </div>
             <div class="mb-3">
               <label for="exampleInputAnswer1" class="form-label">Answer</label>
-              <textarea class="form-control" rows="1"cols="1" id="floatingTextarea" placeholder="What's up?" required></textarea>
+              <textarea class="form-control" rows="1"cols="1" id="answer" name="answer" placeholder="Paste or type your answer here" required></textarea>
             </div>
           
      
-            <button type="submit" class="btn btn-primary">Post</button>
+            <button type="submit" name="questionpost"  class="btn btn-primary">Post</button>
           </form>
 
 

@@ -29,23 +29,23 @@
     >
       <div class="row d-flex justify-content-center align-items-center">
         <div class="col-lg-6 my-2">
-          <a href="./home.html"><button type="button" class="btn btn-primary">Sign In</button></a>
-          <a href="./home.html"><button" class="btn btn-primary">Register</button> </a>
         </div>
 
-        <form action="./home.html">
+        <form action="/" method = "POST">
+         {% csrf_token %}  
           <div class="mb-3">
-            <input type="text" class="form-control" placeholder="Roll no. (E.g. 1)" />
+            <input type="text" class="form-control" autofocus id="username" name="username" required  placeholder="Enter Full Name" />
           </div>
           <div class="mb-3">
             <input
               type="password"
               class="form-control"
               placeholder="Password"
-              id="exampleInputPassword1"
+              id="password" name="password" required
             />
+
           </div>
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="submit" name="signin" class="btn btn-primary">LogIn</button>
         </form>
       </div>
     </div>

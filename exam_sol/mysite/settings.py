@@ -31,12 +31,6 @@ ALLOWED_HOSTS = ['www.leostorenepal.com' , 'leostorenepal.com' , '*' ,  'leostor
 # Application definition
 
 INSTALLED_APPS = [
-    'admin_interface',
-    'colorfield',
-
-    'user.apps.UserConfig',
-    'order.apps.OrderConfig',
-    'product.apps.ProductConfig',
     'home.apps.HomeConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -44,12 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'ckeditor',
-    'mptt',
-    'widget_tweaks',  
-    'django_cleanup', # should go after your apps
-    'mathfilters', # should go after your apps
-    'imagekit', # should go after your apps
 
 
 ]
@@ -79,7 +67,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'currencies.context_processors.currencies'
             ],
         },
     },
@@ -122,7 +109,6 @@ LANGUAGES = [
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale'),
 )
-DEFAULT_CURRENCY = 'USD'
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Asia/Katmandu'
@@ -156,6 +142,7 @@ EMAIL_HOST_USER = 'leostorenepal@gmail.com'
 EMAIL_HOST_PASSWORD = 'lastacc1' 
 
 
+AUTH_USER_MODEL = 'home.CustomUser'
 
 
 MEDIA_URL = '/uploads/'
@@ -168,16 +155,7 @@ SITE_ID = 1
 ##  CKEDITOR CONFIGURATION ##
 ####################################
 
-CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'
 
-CKEDITOR_UPLOAD_PATH = 'images/'
-CKEDITOR_IMAGE_BACKEND = "pillow"
-
-CKEDITOR_CONFIGS = {
-    'default': {
-        'toolbar': None,
-    },
-}
 
 ###################################
 

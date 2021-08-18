@@ -1,115 +1,64 @@
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
+from django.db import models
+from django.contrib.auth.models import PermissionsMixin , AbstractBaseUser , BaseUserManager
+from django.db.models.base import Model
+from django.db import models
+from django.contrib.auth.models import AbstractUser, BaseUserManager
+# from user.models import LikeStore
+# from product.models import Product
+from django.utils.translation import ugettext_lazy as _
+from django.utils.safestring import mark_safe
 
 # Create your models here.
 from django.forms import ModelForm, TextInput, Textarea
 from django.http import request
 from django.utils.safestring import mark_safe
 
-class News(models.Model):
-    email = models.CharField(max_length=50)
-    def __str__(self):
-        return self.email
 
-class Setting(models.Model):
+class UserManager(BaseUserManager):
+    def create_user(self , name , password = None):
+        user = self.model( name= name )
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+    def create_superuser( self , name , password ):
+        user = self.create_user( name = name , password = password)
+        user.is_staff = True
+        user.is_superuser = True
+        user.save(using=self._db)
+        return user
+
+class CustomUser(PermissionsMixin , AbstractBaseUser):
     STATUS = (
-        ('True', 'True'),
-        ('False', 'False'),
+        ('Male', 'Male'),
+        ('Female', 'Female'),
+        ('Other', 'Other'),
     )
-    title = models.CharField(max_length=150)
-    keywords = models.CharField(max_length=255)
-    description = models.CharField(max_length=255)
-    company = models.CharField(max_length=50)
-    address = models.CharField(blank=True,max_length=100)
-    phone = models.CharField(blank=True,max_length=15)
-    link = models.CharField(blank=True,max_length=150)
-    email = models.CharField(blank=True,max_length=50)
-    smtpserver = models.CharField(blank=True,max_length=50)
-    smtpemail = models.CharField(blank=True,max_length=50)
-    smtppassword = models.CharField(blank=True,max_length=10)
-    smtpport = models.CharField(blank=True,max_length=5)
-    icon = models.ImageField(blank=True,upload_to='images/')
-    facebook = models.CharField(blank=True,max_length=50)
-    instagram = models.CharField(blank=True,max_length=50)
-    twitter = models.CharField(blank=True,max_length=50)
-    youtube = models.CharField(blank=True, max_length=50)
-    aboutus = RichTextUploadingField(blank=True)
-    contact = RichTextUploadingField(blank=True)
-    references = RichTextUploadingField(blank=True)
-    status=models.CharField(max_length=10,choices=STATUS)
-    in_charge = models.CharField(blank=True,max_length=50)
-    out_charge = models.CharField(blank=True,max_length=50)
-
+    name = models.CharField(max_length=30 , unique=True)
+    is_active = models.BooleanField(default=True)
+    is_verified = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
+    objects = UserManager()
     create_at=models.DateTimeField(auto_now_add=True)
-    update_at=models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return self.title
-
-
-class Banner(models.Model):
-    STATUS = (
-        ('Url', 'Url'),
-        ('Keywords', 'Keywords'),
-    )
-    name = models.CharField(max_length=150)
-    image = models.ImageField(blank=True,upload_to='images/')
-    link_type=models.CharField(max_length=100,choices=STATUS)
-    search_keywords = models.CharField(max_length=100,blank=True)
-    url = models.CharField(max_length=100,blank=True)
-    create_at=models.DateTimeField(auto_now_add=True)
-    update_at=models.DateTimeField(auto_now=True)
+    USERNAME_FIELD = 'name'
 
     def __str__(self):
         return self.name
 
-
-class ContactMessage(models.Model):
-    STATUS = (
-        ('New', 'New'),
-        ('Read', 'Read'),
-        ('Closed', 'Closed'),
-    )
-    name= models.CharField(blank=True,max_length=20)
-    email= models.CharField(blank=True,max_length=50)
-    subject= models.CharField(blank=True,max_length=50)
-    message= models.TextField(blank=True,max_length=255)
-    status=models.CharField(max_length=10,choices=STATUS,default='New')
-    ip = models.CharField(blank=True, max_length=20)
-    note = models.CharField(blank=True, max_length=100)
-    create_at=models.DateTimeField(auto_now_add=True)
-    update_at=models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.name
-
-class ContactForm(ModelForm):
-    class Meta:
-        model = ContactMessage
-        fields = ['name', 'email', 'subject','message']
-        widgets = {
-            'name'   : TextInput(attrs={'class': 'form-control','placeholder':'Name & Surname'}),
-            'subject' : TextInput(attrs={'class': 'form-control','placeholder':'Subject'}),
-            'email'   : TextInput(attrs={'class': 'form-control','placeholder':'Email Address'}),
-            'message' : Textarea(attrs={'class': 'form-control','placeholder':'Your Message','rows':'5'}),
-        }
-
-
-
-class FAQ(models.Model):
+class QuestionAnwers(models.Model):
     STATUS = (
         ('True', 'True'),
         ('False', 'False'),
     )
-    ordernumber = models.IntegerField()
-    question = models.CharField(max_length=200)
-    answer = RichTextUploadingField()
-    status=models.CharField(max_length=10, choices=STATUS)
-    create_at=models.DateTimeField(auto_now_add=True)
-    update_at=models.DateTimeField(auto_now=True)
-
+    # pidit = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+    pidit=models.CharField(max_length=1000 , null=True)
+    answer=models.CharField(max_length=1000)
+    question=models.CharField(max_length=1000)
+    status=models.CharField(max_length=10, choices=STATUS , default='True')
+    
     def __str__(self):
         return self.question
-
-
-
+    
+ 
