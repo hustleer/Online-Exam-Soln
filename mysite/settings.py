@@ -127,7 +127,7 @@ STATICFILES_DIRS = [
     ]
 
 STATIC_URL = '/static/'
-STATIC_ROOT = '/home/leostore/public_html/static'
+STATIC_ROOT = '/home/static'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
