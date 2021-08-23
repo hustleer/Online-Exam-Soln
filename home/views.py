@@ -69,12 +69,13 @@ def imagepage(request):
         if 'uploadimage' in request.POST:
             if request.method == 'POST':
  
-                files  = request.FILES['uploadedfile']    
-                Images.objects.create(
-                    image = files , 
-                    pidit = request.user.name
-                    
-                )
+                files  = request.FILES.getlist('uploadedfile')  
+                for image in files:  
+                    Images.objects.create(
+                        image = image , 
+                        pidit = request.user.name
+                        
+                    )
                 return HttpResponseRedirect('/refresh')
         image = Images.objects.all().order_by('-id')
         context = {
@@ -135,41 +136,3 @@ def searchquestion(request):
         return HttpResponseRedirect('/')
         
     
-
-def upload_file(request):
-    if request.method == 'POST':
-        form = UploadFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            files  = request.FILES['file']
-            print(files)
-            return HttpResponseRedirect('/success/url/')
-    else:
-        form = UploadFileForm()
-    return render(request, 'upload.html', {'form': form})
-        
-    
-      
-def uploadimage(request):
-    print("hit this line")
-    if request.user.is_authenticated:
-        print("test pass")
- 
-        if 'uploadimage' in request.POST:
-            if request.method == 'POST':
- 
-                files  = request.FILES['uploadedfile']    
-                Images.objects.create(
-                    image = files , 
-                    pidit = request.user.name
-                    
-                )
-
-                return render(request , "image.html" )
-
-
-        return render(request , "image.html" )
-    else:
-        return HttpResponseRedirect('/')
-        
-    
- 
