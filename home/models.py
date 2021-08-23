@@ -62,3 +62,18 @@ class QuestionAnwers(models.Model):
         return self.question
     
  
+class Images(models.Model):
+
+    pidit=models.CharField(max_length=1000 , null=True)
+    image=models.ImageField(upload_to='category/',null=True)
+
+    def image_tag(self):
+        if self.image.url is not None:
+            return mark_safe('<img src="{}" height="50"/>'.format(self.image.url))
+        else:
+            return ""
+    
+    def __str__(self):
+        return self.pidit
+    
+ 

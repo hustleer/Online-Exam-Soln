@@ -4,7 +4,6 @@
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
     <!-- Bootstrap CSS -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
@@ -14,7 +13,7 @@
     />
     <link rel="stylesheet" href="./style.css"/>
 
-    <title>Search page - Online Exam Soln</title>
+    <title>SS - Online Exam Soln</title>
   </head>
   
 
@@ -37,30 +36,25 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/"
+                <a class="nav-link " aria-current="page" href="/"
                   >All</a
                 >
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/postquestion">Post</a>
-              </li>
-                   </li> 
+                <a class="nav-link " href="/postquestion">Post</a>
+              </li> 
                     <li class="nav-item">
-                <a class="nav-link" href="/postquestion">ScreenShot</a>
+                <a class="nav-link active" href="/imagepage">ScreenShot</a>
               </li>
             </ul>
-       <form class="d-flex" action="/searchquestion"  method="POST">
+       <form class="d-flex" enctype="multipart/form-data" action="/imagepage"  method="POST">
              {% csrf_token %}  
 
-              <input
-                class="form-control me-2"
-                type="search"
-                id = "searchques"
-                name = "searchques"
-                placeholder="Search"
-                aria-label="Search"
-              />
-              <button class="btn btn-primary" name="searchquestion" type="submit">Search</button>
+          <input type="file" required name="uploadedfile" id="uploadedfile" style="display:none;"/>
+          <label for="uploadedfile"style="margin-right: 20px;padding: 5px; color: white; border: solid 2px;background: green;">Choose image</label>
+          <button class="btn btn-primary" name="uploadimage" id="uploadimage" type="submit">Upload</button>
+                    
+
             </form>
           </div>
         </div>
@@ -68,14 +62,12 @@
     </div>
     <div class="container-lg my-4">
 
-{% for rs in question %}
+{% for rs in image %}
     <div class="card my-2 shadow-sm mx-auto" >
       <div class="card-body my-2 d-flex align-items-center justify-content-between ">
-        <div class="card_left " style="width: 85%">
-          <h5 class="card-title">{{rs.question}}</h5>
-          <p class="card-text">{{rs.answer}}</p>
+        <div class="card_left " style="width: 100%">
+        <img src="{{rs.image.url}}" width="100%" height="auto">
         </div>
-        <h6 class="card-subtitle mb-2 text-muted">Posted by: {{rs.pidit}}</h6>
       </div>
     </div>
 {% endfor %}

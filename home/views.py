@@ -15,10 +15,16 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import translation
 from home.forms import SearchForm
-from home.models import CustomUser , QuestionAnwers
+from home.models import CustomUser , QuestionAnwers , Images
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+
 
 from mysite import settings
+from django import forms
 
+class UploadFileForm(forms.Form):
+    file = forms.FileField()
 
 def loginpage(request):
     if request.user.is_authenticated:
@@ -49,7 +55,7 @@ def loginpage(request):
 def index(request):
     if request.user.is_authenticated:
  
-        question = QuestionAnwers.objects.all()
+        question = QuestionAnwers.objects.all().order_by('-id')
         context = {
             "question" : question  ,
         }
@@ -57,7 +63,29 @@ def index(request):
     else:
         return HttpResponseRedirect('/')
         
-    
+           
+def imagepage(request):
+    if request.user.is_authenticated:
+        if 'uploadimage' in request.POST:
+            if request.method == 'POST':
+ 
+                files  = request.FILES['uploadedfile']    
+                Images.objects.create(
+                    image = files , 
+                    pidit = request.user.name
+                    
+                )
+                return HttpResponseRedirect('/refresh')
+        image = Images.objects.all().order_by('-id')
+        context = {
+            "image" : image  ,
+        }
+        return render(request , "image.html" , context)
+    else:
+        return HttpResponseRedirect('/')
+
+def refresh(request):
+    return HttpResponseRedirect('/imagepage')
         
 def postquestion(request):
     if request.user.is_authenticated:
@@ -93,14 +121,12 @@ def searchquestion(request):
             if request.method == 'POST':
                 ques  = request.POST['searchques']
                 
-                question = QuestionAnwers.objects.filter(question__icontains  = ques)
+                question = QuestionAnwers.objects.filter(Q(question__icontains=ques) | Q(answer__icontains=ques)  ).order_by('-id')
                 
                 context = {
                     "question" : question
                 }
                 
-                
-
                 return render(request , "search.html" , context )
 
 
@@ -110,7 +136,40 @@ def searchquestion(request):
         
     
 
+def upload_file(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            files  = request.FILES['file']
+            print(files)
+            return HttpResponseRedirect('/success/url/')
+    else:
+        form = UploadFileForm()
+    return render(request, 'upload.html', {'form': form})
         
     
+      
+def uploadimage(request):
+    print("hit this line")
+    if request.user.is_authenticated:
+        print("test pass")
+ 
+        if 'uploadimage' in request.POST:
+            if request.method == 'POST':
+ 
+                files  = request.FILES['uploadedfile']    
+                Images.objects.create(
+                    image = files , 
+                    pidit = request.user.name
+                    
+                )
 
+                return render(request , "image.html" )
+
+
+        return render(request , "image.html" )
+    else:
+        return HttpResponseRedirect('/')
+        
     
+ 
